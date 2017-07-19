@@ -40,12 +40,40 @@ public class UserController {
         return iUserService.userRegister(user);
     }
 
+    /**
+     * 用户登录
+     *
+     * @param user
+     * @param session
+     * @return
+     */
     @PostMapping(value = "login")
     public ServerResponse userLogin(User user, HttpSession session) {
         logger.debug("用户登录");
         return iUserService.login(user, session);
     }
 
+    /**
+     * 判断是否登录
+     *
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "isLogin")
+    public ServerResponse isLogin(HttpSession session) {
+        return iUserService.isLogin(session);
+    }
+
+    /**
+     * 退出
+     *
+     * @param session 会话
+     * @return
+     */
+    @PostMapping(value = "logout")
+    public ServerResponse logout(HttpSession session) {
+        return iUserService.logout(session);
+    }
 
     /*@RequestMapping(value = "test", method = RequestMethod.POST)
     public ServerResponse test(User user, HttpServletResponse response) {

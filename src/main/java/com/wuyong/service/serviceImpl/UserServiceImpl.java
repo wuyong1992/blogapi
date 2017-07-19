@@ -62,7 +62,8 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 用户登录并保存至session
-     * @param user 传入数据
+     *
+     * @param user    传入数据
      * @param session 会话
      * @return
      */
@@ -76,8 +77,32 @@ public class UserServiceImpl implements IUserService {
         }
         //将当前用户置入session
         session.setAttribute("currentUser", currentUser);
-        return ServerResponse.createBySuccess("注册成功",currentUser);
+        return ServerResponse.createBySuccess("注册成功", currentUser);
     }
 
+    /**
+     * 判断当前用户是否已经登录
+     * @param session 会话
+     * @return
+     */
+    public ServerResponse isLogin(HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null || "".equals(currentUser.getUsername())) {
+            return ServerResponse.createByErrorMessage("当前用户尚未登录");
+        }
+        return ServerResponse.createBySuccess("该用户已登录", currentUser);
+    }
 
+    /**
+     * 退出功能
+     * @param session 会话
+     * @return
+     */
+    public ServerResponse logout(HttpSession session) {
+        session.removeAttribute("currentUser");
+        if (session.getAttribute("currentUser") != null) {
+            return ServerResponse.createByErrorMessage("退出失败");
+        }
+        return ServerResponse.createBySuccessMessage("退出成功");
+    }
 }
