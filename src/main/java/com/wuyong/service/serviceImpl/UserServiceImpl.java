@@ -77,7 +77,7 @@ public class UserServiceImpl implements IUserService {
         }
         //将当前用户置入session
         session.setAttribute("currentUser", currentUser);
-        return ServerResponse.createBySuccess("注册成功", currentUser);
+        return ServerResponse.createBySuccess("登录成功", currentUser);
     }
 
     /**
@@ -99,10 +99,11 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     public ServerResponse logout(HttpSession session) {
+
         session.removeAttribute("currentUser");
         if (session.getAttribute("currentUser") != null) {
             return ServerResponse.createByErrorMessage("退出失败");
         }
-        return ServerResponse.createBySuccessMessage("退出成功");
+        return ServerResponse.createBySuccessMessage("退出成功!");
     }
 }

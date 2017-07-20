@@ -36,7 +36,7 @@ public class UserController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public ServerResponse userRegister(User user) {
-        logger.info("获取user对象:" + "\t" + user);
+        logger.info("====获取注册user对象:" + "\t" + user);
         return iUserService.userRegister(user);
     }
 
@@ -49,7 +49,7 @@ public class UserController {
      */
     @PostMapping(value = "login")
     public ServerResponse userLogin(User user, HttpSession session) {
-        logger.debug("用户登录");
+        logger.info("====登录请求已收到，user："+user);
         return iUserService.login(user, session);
     }
 
@@ -61,6 +61,7 @@ public class UserController {
      */
     @RequestMapping(value = "isLogin")
     public ServerResponse isLogin(HttpSession session) {
+        logger.info("====是否登录请求已收到====");
         return iUserService.isLogin(session);
     }
 
@@ -70,8 +71,9 @@ public class UserController {
      * @param session 会话
      * @return
      */
-    @PostMapping(value = "logout")
+    @RequestMapping(value = "logout")
     public ServerResponse logout(HttpSession session) {
+        logger.info("======退出登录请求已收到====");
         return iUserService.logout(session);
     }
 

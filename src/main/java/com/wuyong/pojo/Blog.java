@@ -28,12 +28,12 @@ public class Blog {
      */
     @Id
     @GeneratedValue
-    private Integer id;
+    private Integer id;     //id
 
-    private String title;
-    private String imgUrl;
-    private String intro;
-    private String content;
+    private String title;   //标题
+    private String imgUrl;  //图片链接
+    private String intro;   //简介
+    private String content; //内容
 
     public Blog() {
     }
