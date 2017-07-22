@@ -21,3 +21,15 @@ spring:
       max-idle: 8
       min-idle: 0
     timeout: 0
+
+#FTP配置
+ftp.server.ip: 106.15.196.17
+ftp.server.port: 21
+ftp.user: ftpuser
+ftp.pass: jianguo1992
+ftp.server.http.prefix: http://img.huyunyun.com/
+
+
+alipay.callback.url: http://www.huyunyun.com/order/alipay_callback.do
+
+password.salt: geelysdafaqj23ou89ZXcj@#$@#$#@KJdjklj;D../dSF.,

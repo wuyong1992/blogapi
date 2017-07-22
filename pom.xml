@@ -92,6 +92,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.1</version>
+        </dependency>
         <!--aop end-->
 
         <!--spring boot devtools 热启动依赖 start-->
