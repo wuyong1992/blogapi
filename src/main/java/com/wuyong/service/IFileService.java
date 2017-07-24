@@ -4,9 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by 坚果
- * on 2017/7/22
+ * on 2017/7/24
  */
-public interface IBlogService {
+public interface IFileService {
 
-    public String richTextImgUpload(MultipartFile file, String path);
+    public String upload(MultipartFile file, String path);
 }

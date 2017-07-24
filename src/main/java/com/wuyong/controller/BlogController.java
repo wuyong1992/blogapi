@@ -40,7 +40,7 @@ public class BlogController {
         String path = request.getSession().getServletContext().getRealPath("/upload");
         if (files != null && files.length > 0) {
             for (MultipartFile file : files) {
-                String targetFileName =iBlogService.upload(file, path);
+                String targetFileName =iBlogService.richTextImgUpload(file, path);
                 logger.info(targetFileName);
                 String url = "http://img.huyunyun.com/" + targetFileName;
                 resultMap.put("link", url);
