@@ -1,10 +1,12 @@
 package com.wuyong.controller;
 
 import com.google.common.collect.Maps;
+import com.wuyong.common.ServerResponse;
 import com.wuyong.service.IBlogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,9 +49,27 @@ public class BlogController {
                 return resultMap;
             }
         }else {
+            //TODO
             return null;
         }
 
         return null;
     }
+
+    /**
+     * blog简介图片，其实就是上面的复用
+     * @param files 文件
+     * @param request   请求
+     * @param session   会话
+     */
+    @PostMapping(value = "imgUpload")
+    public void imgUpload(@RequestParam(value = "file") MultipartFile[] files,
+                                    HttpServletRequest request, HttpSession session){
+
+        //TODO 保存到对应的blog
+
+        this.editorImgUpload(files, request, session);
+
+    }
+
 }
