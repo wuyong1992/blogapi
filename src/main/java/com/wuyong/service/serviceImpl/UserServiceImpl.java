@@ -77,6 +77,7 @@ public class UserServiceImpl implements IUserService {
         }
         //将当前用户置入session
         session.setAttribute("currentUser", currentUser);
+        logger.info("currentUser"+session.getAttribute("currentUser"));
         return ServerResponse.createBySuccess("登录成功", currentUser);
     }
 

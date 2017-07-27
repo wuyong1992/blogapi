@@ -1,6 +1,7 @@
 package com.wuyong.common;
 
 import com.google.common.collect.Sets;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Set;
 
@@ -12,9 +13,9 @@ import java.util.Set;
 public class Const {
 
     public static final String CURRENT_USER = "currentUser";
-
     public static final String EMAIL = "email";
     public static final String USERNAME = "username";
+
 
     //排序规则
     public interface ProductOrderBy {

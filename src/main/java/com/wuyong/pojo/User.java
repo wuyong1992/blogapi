@@ -37,7 +37,7 @@ public class User {
     private Integer status;
     private Integer role;
 
-    @Column(columnDefinition = "0")
+   /* @Column(columnDefinition = "0")
     public Integer getStatus() {
         return status;
     }
@@ -45,7 +45,7 @@ public class User {
     @Column(columnDefinition = "0")
     public Integer getRole() {
         return role;
-    }
+    }*/
 
     @Override
     public String toString() {

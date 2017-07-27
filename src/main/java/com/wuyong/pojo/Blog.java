@@ -34,6 +34,7 @@ public class Blog {
     private String imgUrl;  //图片链接
     private String intro;   //简介
     private String content; //内容
+    private Integer authorId; //所属作者id
 
     public Blog() {
     }
@@ -46,7 +47,7 @@ public class Blog {
                 ", imgUrl='" + imgUrl + '\'' +
                 ", intro='" + intro + '\'' +
                 ", content='" + content + '\'' +
+                ", authorId=" + authorId +
                 '}';
     }
-
 }

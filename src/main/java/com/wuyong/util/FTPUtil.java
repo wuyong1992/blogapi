@@ -3,8 +3,6 @@ package com.wuyong.util;
 import org.apache.commons.net.ftp.FTPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,16 +14,15 @@ import java.util.List;
  */
 public class FTPUtil {
 
+    //TODO 静态变量赋值
+
     private static final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
 
-//    @Value("${ftp.server.ip}")
-    private static  String FTP_IP= "106.15.196.17";
-//    @Value("${ftp.server.port}")
+    private static String FTP_IP = "106.15.196.17";
     private static Integer FTP_PORT = 21;
-//    @Value("${ftp.user}")
     private static String FTP_USER = "ftpuser";
-//    @Value("${ftp.pass}")
     private static String FTP_PASS = "jianguo1992";
+
 
     private String ip;
     private int port;   //端口
@@ -43,20 +40,22 @@ public class FTPUtil {
 
     /**
      * 开方的公共静态方法
-     * @param fileList  文件集合
+     *
+     * @param fileList 文件集合
      * @return
      * @throws IOException
      */
     public static Boolean uploadFile(List<File> fileList) throws IOException {
         FTPUtil ftpUtil = new FTPUtil(FTP_IP, FTP_PORT, FTP_USER, FTP_PASS);
         logger.info("开始链接服务器");
-        boolean result = ftpUtil.uploadFile("img",fileList);
-        logger.info("结束上传，上传结果：{}",result);
+        boolean result = ftpUtil.uploadFile("img", fileList);
+        logger.info("结束上传，上传结果：{}", result);
         return result;
     }
 
     /**
      * 上传方法
+     *
      * @param remotePath 远端路劲
      * @param fileList   文件集合
      * @return
@@ -86,7 +85,7 @@ public class FTPUtil {
                 logger.error("上传文件异常：", e);
                 uploaded = false;
             } finally {
-                if (fileInputStream != null){
+                if (fileInputStream != null) {
                     fileInputStream.close();
                 }
                 ftpClient.disconnect();
@@ -100,10 +99,11 @@ public class FTPUtil {
 
     /**
      * 链接ftp服务器
-     * @param ip    ip
-     * @param port  端口
-     * @param user  用户名
-     * @param pwd   密码
+     *
+     * @param ip   ip
+     * @param port 端口
+     * @param user 用户名
+     * @param pwd  密码
      * @return
      */
     private boolean connectServer(String ip, int port, String user, String pwd) {
@@ -120,11 +120,11 @@ public class FTPUtil {
     }
 
 
+
     //Getter Setter
     public String getIp() {
         return ip;
     }
-
     public void setIp(String ip) {
         this.ip = ip;
     }
