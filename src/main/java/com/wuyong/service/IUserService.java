@@ -15,7 +15,7 @@ public interface IUserService {
 
     public ServerResponse userRegister(User user);
 
-    public ServerResponse login(User user, HttpSession session);
+    public ServerResponse login(User user);
 
     public ServerResponse isLogin(HttpSession session);
 

@@ -33,6 +33,7 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     public ServerResponse userRegister(User user) {
+        //前端校验，后端也防止api被恶意调用注册
         if (StringUtils.isBlank(user.getUsername())) {
             return ServerResponse.createByErrorMessage("请输入用户名");
         }
@@ -64,20 +65,21 @@ public class UserServiceImpl implements IUserService {
      * 用户登录并保存至session
      *
      * @param user    传入数据
-     * @param session 会话
      * @return
      */
-    public ServerResponse login(User user, HttpSession session) {
+    public ServerResponse login(User user) {
+
         User currentUser = userRepository.findUserByUsername(user.getUsername());
         if (currentUser == null) {
             return ServerResponse.createByErrorMessage("该用户不存在");
         }
+        //TODO password MD+salt
         if (!StringUtils.equals(currentUser.getPassword(), user.getPassword())) {
             return ServerResponse.createByErrorMessage("密码错误");
         }
-        //将当前用户置入session
-        session.setAttribute("currentUser", currentUser);
-        logger.info("currentUser"+session.getAttribute("currentUser"));
+        //密码置空
+        currentUser.setPassword("");
+        //TODO 校验成功，angular再次发送请求获取jjwt生成的token
         return ServerResponse.createBySuccess("登录成功", currentUser);
     }
 

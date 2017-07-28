@@ -2,6 +2,7 @@ package com.wuyong.pojo;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
@@ -9,6 +10,7 @@ import redis.clients.jedis.JedisPool;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * Created by 坚果
@@ -16,7 +18,8 @@ import javax.persistence.Id;
  */
 @Entity
 @Component
-@Getter@Setter
+@Getter
+@Setter
 public class Blog {
 
     /**
@@ -36,6 +39,9 @@ public class Blog {
     private String content; //内容
     private Integer authorId; //所属作者id
 
+    @CreationTimestamp
+    private Date created;
+
     public Blog() {
     }
 
@@ -48,6 +54,7 @@ public class Blog {
                 ", intro='" + intro + '\'' +
                 ", content='" + content + '\'' +
                 ", authorId=" + authorId +
+                ", created=" + created +
                 '}';
     }
 }

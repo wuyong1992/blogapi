@@ -1,5 +1,6 @@
 package com.wuyong.controller;
 
+import com.wuyong.common.Const;
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.User;
 import com.wuyong.service.IUserService;
@@ -7,10 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -42,15 +40,23 @@ public class UserController {
 
     /**
      * 用户登录
-     *
+     * 后期需要加入token验证
+     * @RequestBody 接收json传值？
      * @param user
      * @param session
      * @return
      */
     @PostMapping(value = "login")
-    public ServerResponse userLogin(User user, HttpSession session) {
-        logger.info("====登录请求已收到，user："+user);
-        return iUserService.login(user, session);
+    public ServerResponse userLogin(@RequestBody User user, HttpSession session) {
+        logger.info("====登录请求已收到，user：" + user);
+        ServerResponse serverResponse = iUserService.login(user);
+        if (serverResponse.isSuccess()) {
+            //将当前用户置入session
+            session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
+            logger.info(Const.CURRENT_USER + serverResponse.getData());
+        }
+        return serverResponse;
+
     }
 
     /**

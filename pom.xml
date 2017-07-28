@@ -99,6 +99,14 @@
         </dependency>
         <!--aop end-->
 
+        <!--json web token start-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <!--json web token end-->
+
         <!--spring boot devtools 热启动依赖 start-->
        <!-- <dependency>
             <groupId>org.springframework.boot</groupId>

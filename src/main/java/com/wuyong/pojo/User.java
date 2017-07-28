@@ -1,13 +1,16 @@
 package com.wuyong.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * Created by 坚果
@@ -15,7 +18,8 @@ import javax.persistence.Id;
  */
 @Entity
 @Component
-@Getter@Setter
+@Getter
+@Setter
 public class User {
 
     /**
@@ -25,6 +29,7 @@ public class User {
      * email    邮箱
      * status   状态  0:正常    1:禁用
      * role     角色  0:普通    1:管理员
+     * created  创建时间戳
      */
     @Id
     @GeneratedValue
@@ -33,9 +38,13 @@ public class User {
     private String username;
     private String nickname;
     private String email;
+    @JsonIgnore
     private String password;
     private Integer status;
     private Integer role;
+
+    @CreationTimestamp
+    private Date created;
 
    /* @Column(columnDefinition = "0")
     public Integer getStatus() {
@@ -47,6 +56,7 @@ public class User {
         return role;
     }*/
 
+
     @Override
     public String toString() {
         return "User{" +
@@ -57,6 +67,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", status=" + status +
                 ", role=" + role +
+                ", created=" + created +
                 '}';
     }
+
 }
