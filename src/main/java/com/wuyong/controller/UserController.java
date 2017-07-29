@@ -33,7 +33,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ServerResponse userRegister(User user) {
+    public ServerResponse userRegister(@RequestBody User user) {
         logger.info("====获取注册user对象:" + "\t" + user);
         return iUserService.userRegister(user);
     }

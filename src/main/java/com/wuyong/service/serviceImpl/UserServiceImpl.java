@@ -34,20 +34,24 @@ public class UserServiceImpl implements IUserService {
      */
     public ServerResponse userRegister(User user) {
         //前端校验，后端也防止api被恶意调用注册
-        if (StringUtils.isBlank(user.getUsername())) {
+        //用户名去除空格
+        String username = StringUtils.trim(user.getUsername());
+        if (StringUtils.isBlank(username)) {
             return ServerResponse.createByErrorMessage("请输入用户名");
         }
         if (StringUtils.isBlank(user.getNickname())) {
-            return ServerResponse.createByErrorMessage("请输入昵称");
+            return ServerResponse.createByErrorMessage("昵称还是要有的");
         }
         if (StringUtils.isBlank(user.getPassword())) {
             return ServerResponse.createByErrorMessage("请输入密码");
         }
         //判断用户名是否已经存在
-        User userFind = userRepository.findUserByUsername(user.getUsername());
+        User userFind = userRepository.findUserByUsername(username);
         if (userFind != null) {
             return ServerResponse.createByErrorMessage("用户名已存在");
         }
+        user.setRole(0);
+        user.setStatus(0);
         //TODO password MD5加密
         userRepository.save(user);
         //TODO 注册成功后自动登录
@@ -64,7 +68,7 @@ public class UserServiceImpl implements IUserService {
     /**
      * 用户登录并保存至session
      *
-     * @param user    传入数据
+     * @param user 传入数据
      * @return
      */
     public ServerResponse login(User user) {
@@ -85,6 +89,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 判断当前用户是否已经登录
+     *
      * @param session 会话
      * @return
      */
@@ -98,6 +103,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 退出功能
+     *
      * @param session 会话
      * @return
      */

@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -16,15 +17,10 @@ import java.io.IOException;
  * Created by 坚果
  * on 2017/7/28
  */
-@WebFilter(filterName = "JwtFilter")
-public class JwtFilter implements Filter {
+public class JwtFilter extends GenericFilterBean {
 
     public static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
 
     public void doFilter(final ServletRequest req,
                          final ServletResponse res,
@@ -57,9 +53,5 @@ public class JwtFilter implements Filter {
 
     }
 
-    @Override
-    public void destroy() {
-
-    }
 
 }

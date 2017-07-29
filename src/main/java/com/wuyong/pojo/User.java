@@ -35,10 +35,11 @@ public class User {
     @GeneratedValue
     private Integer id;
 
+    private String mobile;
     private String username;
     private String nickname;
     private String email;
-    @JsonIgnore
+//    @JsonIgnore   //接收不到前端传递的password
     private String password;
     private Integer status;
     private Integer role;
