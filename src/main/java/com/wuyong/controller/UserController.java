@@ -8,10 +8,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by 坚果
@@ -27,24 +32,36 @@ public class UserController {
     private IUserService iUserService;
 
     /**
-     * 用户注册模块
-     *
-     * @param user 用户对象
+     * 用户注册
+     * @param user  用户对象
+     * @param bindingResult 错误信息
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ServerResponse userRegister(@RequestBody User user) {
+    public ServerResponse userRegister(@RequestBody @Validated User user, BindingResult bindingResult) {
         logger.info("====获取注册user对象:" + "\t" + user);
+        if (bindingResult.hasErrors()) {
+//            bindingResult.getFieldErrors();
+//            List<FieldError> errorList = bindingResult.getFieldErrors();
+//            StringBuilder errorStr = new StringBuilder();
+//            errorStr.append("错误信息：\n\r");
+//            for (ObjectError error : errorList) {
+//                errorStr.append(error.getDefaultMessage() + "\r\n");
+//            }
+            logger.info("校验错误信息====>" + bindingResult.getFieldError().getDefaultMessage());
+            return ServerResponse.createByErrorMessage(bindingResult.getFieldError().getDefaultMessage());
+        }
         return iUserService.userRegister(user);
     }
 
     /**
      * 用户登录
      * 后期需要加入token验证
-     * @RequestBody 接收json传值？
+     *
      * @param user
      * @param session
      * @return
+     * @RequestBody 接收json传值？
      */
     @PostMapping(value = "login")
     public ServerResponse userLogin(@RequestBody User user, HttpSession session) {

@@ -34,20 +34,25 @@ public class UserServiceImpl implements IUserService {
      */
     public ServerResponse userRegister(User user) {
         //前端校验，后端也防止api被恶意调用注册
-        //用户名去除空格
-        String username = StringUtils.trim(user.getUsername());
-        if (StringUtils.isBlank(username)) {
-            return ServerResponse.createByErrorMessage("请输入用户名");
-        }
-        if (StringUtils.isBlank(user.getNickname())) {
-            return ServerResponse.createByErrorMessage("昵称还是要有的");
-        }
-        if (StringUtils.isBlank(user.getPassword())) {
-            return ServerResponse.createByErrorMessage("请输入密码");
-        }
+        //不用清理空格，在校验的时候已经清除了
+        //String username = StringUtils.trim(user.getUsername());
+//        if (StringUtils.isBlank(user.getUsername())) {
+//            return ServerResponse.createByErrorMessage("请输入用户名");
+//        }
+//        if (StringUtils.isBlank(user.getNickname())) {
+//            return ServerResponse.createByErrorMessage("昵称还是要有的");
+//        }
+//        if (StringUtils.isBlank(user.getPassword())) {
+//            return ServerResponse.createByErrorMessage("请输入密码");
+//        }
         //判断用户名是否已经存在
-        User userFind = userRepository.findUserByUsername(username);
-        if (userFind != null) {
+
+        User userFindByMobile = userRepository.findUserByMobile(user.getMobile());
+        if (userFindByMobile != null) {
+            return ServerResponse.createByErrorMessage("该手机号已被注册");
+        }
+        User userFindByUsername = userRepository.findUserByUsername(user.getUsername());
+        if (userFindByUsername != null) {
             return ServerResponse.createByErrorMessage("用户名已存在");
         }
         user.setRole(0);
@@ -56,12 +61,11 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
         //TODO 注册成功后自动登录
         //将该用户放入session中
-        /*User currentUser = userRepository.findUserByUsername(user.getUsername()).get(0);
-        if (currentUser == null) {
-            return ServerResponse.createByErrorMessage("获取用户失败");
-        }
-        session.setAttribute("currentUser", currentUser);
-        */
+//        User currentUser = userRepository.findUserByUsername(user.getUsername()).get(0);
+//        if (currentUser == null) {
+//            return ServerResponse.createByErrorMessage("获取用户失败");
+//        }
+//        session.setAttribute("currentUser", currentUser);
         return ServerResponse.createBySuccessMessage("注册成功");
     }
 

@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -35,12 +38,15 @@ public class User {
     @GeneratedValue
     private Integer id;
 
+    @Pattern(regexp = "^1[3|4|5|8][0-9]\\d{8}$", message = "{user.mobile.pattern}")
     private String mobile;
+    @NotBlank(message = "{user.username.NotBlank}")
     private String username;
-    private String nickname;
-    private String email;
-//    @JsonIgnore   //接收不到前端传递的password
+    //    @JsonIgnore   //接收不到前端传递的password
+    @NotBlank(message = "{user.password.NotBlank}")
     private String password;
+    @Email(message = "{user.password.Email}")
+    private String email;
     private Integer status;
     private Integer role;
 
@@ -63,7 +69,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", nickname='" + nickname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", status=" + status +
