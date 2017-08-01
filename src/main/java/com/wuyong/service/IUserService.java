@@ -20,4 +20,6 @@ public interface IUserService {
     public ServerResponse isLogin(HttpSession session);
 
     public ServerResponse logout(HttpSession session);
+
+    public Boolean validateMobile(String mobile);
 }

@@ -55,6 +55,17 @@ public class UserController {
     }
 
     /**
+     * 校验手机号是否已被注册
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "validateMobile")
+    public Boolean validateMobile(String mobile) {
+        return iUserService.validateMobile(mobile);
+    }
+
+
+    /**
      * 用户登录
      * 后期需要加入token验证
      *

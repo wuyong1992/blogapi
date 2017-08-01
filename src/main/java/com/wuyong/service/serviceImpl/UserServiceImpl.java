@@ -119,4 +119,10 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createBySuccessMessage("退出成功!");
     }
+
+    //手机号码是否被注册
+    public Boolean validateMobile(String mobile) {
+        return userRepository.findUserByMobile(mobile) == null;
+    }
+
 }
