@@ -69,14 +69,16 @@ public class UserController {
      * 用户登录
      * 后期需要加入token验证
      *
-     * @param user
+     * @param mobile  用户登录使用手机号
+     * @param password  密码
      * @param session
      * @return
      * @RequestBody 接收json传值？
      */
     @PostMapping(value = "login")
-    public ServerResponse userLogin(@RequestBody User user, HttpSession session) {
-        logger.info("====登录请求已收到，user：" + user);
+    public ServerResponse userLogin(String mobile, String password, HttpSession session) {
+        logger.info("====登录请求已收到，user：" );
+        User user = new User();
         ServerResponse serverResponse = iUserService.login(user);
         if (serverResponse.isSuccess()) {
             //将当前用户置入session

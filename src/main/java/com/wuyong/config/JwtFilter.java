@@ -49,6 +49,8 @@ public class JwtFilter extends GenericFilterBean {
             } catch (final SignatureException e) {
                 throw new ServletException("Invalid token -_-!");
             }
+
+            chain.doFilter(req,res);
         }
 
     }

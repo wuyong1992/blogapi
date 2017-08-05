@@ -77,9 +77,9 @@ public class UserServiceImpl implements IUserService {
      */
     public ServerResponse login(User user) {
 
-        User currentUser = userRepository.findUserByUsername(user.getUsername());
+        User currentUser = userRepository.findUserByMobile(user.getMobile());
         if (currentUser == null) {
-            return ServerResponse.createByErrorMessage("该用户不存在");
+            return ServerResponse.createByErrorMessage("该手机号不存在");
         }
         //TODO password MD+salt
         if (!StringUtils.equals(currentUser.getPassword(), user.getPassword())) {
