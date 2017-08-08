@@ -33,7 +33,8 @@ public class UserController {
 
     /**
      * 用户注册
-     * @param user  用户对象
+     *
+     * @param user          用户对象
      * @param bindingResult 错误信息
      * @return
      */
@@ -56,6 +57,7 @@ public class UserController {
 
     /**
      * 校验手机号是否已被注册
+     *
      * @param mobile
      * @return
      */
@@ -69,24 +71,19 @@ public class UserController {
      * 用户登录
      * 后期需要加入token验证
      *
-     * @param mobile  用户登录使用手机号
-     * @param password  密码
-     * @param session
+     * @param mobile   用户登录使用手机号
+     * @param password 密码
      * @return
-     * @RequestBody 接收json传值？
      */
     @PostMapping(value = "login")
     public ServerResponse userLogin(String mobile, String password, HttpSession session) {
-        logger.info("====登录请求已收到，user：" );
-        User user = new User();
-        ServerResponse serverResponse = iUserService.login(user);
+        ServerResponse serverResponse = iUserService.login(mobile, password);
         if (serverResponse.isSuccess()) {
-            //将当前用户置入session
+            /*//将当前用户置入session
             session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
-            logger.info(Const.CURRENT_USER + serverResponse.getData());
+            logger.info(Const.CURRENT_USER + serverResponse.getData());*/
         }
         return serverResponse;
-
     }
 
     /**

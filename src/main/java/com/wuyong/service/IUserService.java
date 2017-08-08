@@ -15,7 +15,7 @@ public interface IUserService {
 
     public ServerResponse userRegister(User user);
 
-    public ServerResponse login(User user);
+    public ServerResponse login(String mobile, String password);
 
     public ServerResponse isLogin(HttpSession session);
 

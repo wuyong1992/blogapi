@@ -4,6 +4,10 @@ import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.User;
 import com.wuyong.repository.UserRepository;
 import com.wuyong.service.IUserService;
+import com.wuyong.vo.UserVo;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import jdk.internal.org.objectweb.asm.signature.SignatureWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,23 +77,38 @@ public class UserServiceImpl implements IUserService {
     /**
      * 用户登录并保存至session
      *
-     * @param user 传入数据
+     * @param mobile   手机号
+     * @param password 密码
      * @return
      */
-    public ServerResponse login(User user) {
+    public ServerResponse login(String mobile, String password) {
 
-        User currentUser = userRepository.findUserByMobile(user.getMobile());
-        if (currentUser == null) {
+        User user = userRepository.findUserByMobile(mobile);
+        if (user == null) {
             return ServerResponse.createByErrorMessage("该手机号不存在");
         }
         //TODO password MD+salt
-        if (!StringUtils.equals(currentUser.getPassword(), user.getPassword())) {
+        if (!StringUtils.equals(user.getPassword(), password)) {
             return ServerResponse.createByErrorMessage("密码错误");
         }
-        //密码置空
-        currentUser.setPassword("");
+        if (user.getStatus() == 1) {
+            return ServerResponse.createByErrorMessage("该用户已被冻结，暂停使用");
+        }
+        //返回VO
+        /*UserVo currentUser = new UserVo();
+        currentUser.setEmail(user.getEmail());
+        currentUser.setId(user.getId());
+        currentUser.setMobile(user.getMobile());
+        currentUser.setRole(user.getRole());
+        currentUser.setUsername(user.getUsername());*/
         //TODO 校验成功，angular再次发送请求获取jjwt生成的token
-        return ServerResponse.createBySuccess("登录成功", currentUser);
+//        return ServerResponse.createBySuccess("登录成功", currentUser);
+
+        String token = Jwts.builder().setSubject(mobile).claim("roles", "user")
+                .setIssuedAt(new Date()).signWith(SignatureAlgorithm.ES256, "secretKey")
+                .compact();
+
+        return ServerResponse.createBySuccess("登录成功", token);
     }
 
     /**
