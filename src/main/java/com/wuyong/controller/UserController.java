@@ -1,9 +1,13 @@
 package com.wuyong.controller;
 
 import com.wuyong.common.Const;
+import com.wuyong.common.ResponseCode;
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.User;
 import com.wuyong.service.IUserService;
+import com.wuyong.vo.UserVo;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +18,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -69,7 +74,7 @@ public class UserController {
 
     /**
      * 用户登录
-     * 后期需要加入token验证
+     * 返回token
      *
      * @param mobile   用户登录使用手机号
      * @param password 密码
@@ -84,6 +89,22 @@ public class UserController {
             logger.info(Const.CURRENT_USER + serverResponse.getData());*/
         }
         return serverResponse;
+    }
+
+    @RequestMapping(value = "/rest/getCurrentUser")
+    public ServerResponse getCurrentUser(HttpServletRequest request) {
+        String authorization = request.getHeader("authorization");
+        String token = authorization.substring(7);
+        Claims claims = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody();
+        logger.info("claims====>" + claims);
+        String username = claims.getSubject();
+        logger.info("username====>" + username);
+        UserVo currentUser = iUserService.findUserByUsername(username);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return ServerResponse.createBySuccess(currentUser);
+
     }
 
     /**

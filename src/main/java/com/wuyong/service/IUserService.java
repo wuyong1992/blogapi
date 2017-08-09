@@ -3,6 +3,7 @@ package com.wuyong.service;
 
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.User;
+import com.wuyong.vo.UserVo;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,4 +23,6 @@ public interface IUserService {
     public ServerResponse logout(HttpSession session);
 
     public Boolean validateMobile(String mobile);
+
+    public UserVo findUserByUsername(String username);
 }

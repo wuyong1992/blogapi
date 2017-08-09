@@ -7,7 +7,6 @@ import com.wuyong.service.IUserService;
 import com.wuyong.vo.UserVo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jdk.internal.org.objectweb.asm.signature.SignatureWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,10 +103,13 @@ public class UserServiceImpl implements IUserService {
         //TODO 校验成功，angular再次发送请求获取jjwt生成的token
 //        return ServerResponse.createBySuccess("登录成功", currentUser);
 
-        String token = Jwts.builder().setSubject(mobile).claim("roles", "user")
-                .setIssuedAt(new Date()).signWith(SignatureAlgorithm.ES256, "secretKey")
+        String token = Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("roles", "user")
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, "secretkey")    //secretkey是自己定义的私钥
                 .compact();
-
+        logger.info("token===>" + token);
         return ServerResponse.createBySuccess("登录成功", token);
     }
 
@@ -145,4 +147,22 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findUserByMobile(mobile) == null;
     }
 
+    /**
+     * 根据用户名查找用户
+     * @param username
+     * @return
+     */
+    public UserVo findUserByUsername(String username) {
+        if (StringUtils.isBlank(username)) {
+            return null;
+        }
+        User user =userRepository.findUserByUsername(username);
+        UserVo currentUser = new UserVo();
+        currentUser.setEmail(user.getEmail());
+        currentUser.setId(user.getId());
+        currentUser.setMobile(user.getMobile());
+        currentUser.setRole(user.getRole());
+        currentUser.setUsername(user.getUsername());
+        return currentUser;
+    }
 }

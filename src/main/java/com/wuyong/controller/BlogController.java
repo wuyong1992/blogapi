@@ -6,14 +6,13 @@ import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.Blog;
 import com.wuyong.service.IBlogService;
 import com.wuyong.service.IFileService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,11 +39,17 @@ public class BlogController {
     private String imageURL;
 
 
+    /**
+     * 富文本中图片上传信息
+     *
+     * @param files
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "editorImgUpload")
     public Map editorImgUpload(@RequestParam(value = "file") MultipartFile[] files,
-                               HttpServletRequest request, HttpSession session) {
-        logger.info("富文本请求收到");
-        logger.info("收到内容是：" + files);
+                               HttpServletRequest request) {
+        logger.info("富文本请求收到收到内容是：" + files);
         logger.info("数量：" + files.length);
 
         Map resultMap = Maps.newHashMap();
@@ -72,11 +77,10 @@ public class BlogController {
      *
      * @param file    文件
      * @param request 请求
-     * @param session 会话
      */
-    @PostMapping(value = "imgUpload")
+    @PostMapping(value = "/rest/imgUpload")
     public void imgUpload(@RequestParam(value = "file") MultipartFile file,
-                          HttpServletRequest request, HttpSession session) {
+                          HttpServletRequest request) {
 
         //TODO 保存到对应的blog
 
@@ -86,13 +90,22 @@ public class BlogController {
         logger.info("imageURL====>" + imageURL);
     }
 
-    @PostMapping(value = "blogSave")
-    public ServerResponse blogSave(Blog blog, HttpSession session) {
-        logger.info("接受blog信息");
+    /**
+     * blog上传
+     *
+     * @param blog
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/rest/blogSave")
+    public ServerResponse blogSave(@RequestBody Blog blog, HttpServletRequest request) {
+        logger.info("接受blog信息====>" + blog);
         blog.setImgUrl(this.imageURL);
-        //logger.info("blog====>" + blog);
-
-        return iBlogService.blogSave(blog, session);
+        /*String authorization = request.getHeader("authorization");
+        String token = authorization.substring(7);
+        String username = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody().getSubject();
+        */
+        return iBlogService.blogSave(blog);
     }
 
 

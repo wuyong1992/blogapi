@@ -52,13 +52,11 @@ public class BlogServiceImpl implements IBlogService {
     /**
      * 保存博客
      * @param blog  博客
-     * @param session   会话
      * @return
      */
-    public ServerResponse blogSave(Blog blog, HttpSession session){
-        User currentUser = (User) session.getAttribute("currentUser");
-        //TODO null?
-        logger.info("currentUser====>"+currentUser);
+    public ServerResponse blogSave(Blog blog){
+        //User currentUser = (User) session.getAttribute("currentUser");
+        /*logger.info("currentUser====>"+currentUser);
         if (currentUser == null || currentUser.getUsername() == null) {
             return ServerResponse.createByErrorMessage("请先登录");
         }
@@ -67,7 +65,7 @@ public class BlogServiceImpl implements IBlogService {
         }
         if (!StringUtils.equals(blog.getAuthorId()+"",currentUser.getId()+"")) {
             return ServerResponse.createByErrorMessage("该博客与当前用户不符合");
-        }
+        }*/
         //保存到数据库
         Blog blogSaved = blogRepository.save(blog);
         if (blogSaved.getId() == null) {
