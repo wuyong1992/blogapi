@@ -6,9 +6,11 @@ import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.Blog;
 import com.wuyong.pojo.User;
 import com.wuyong.repository.BlogRepository;
+import com.wuyong.repository.UserRepository;
 import com.wuyong.service.IBlogService;
 import com.wuyong.service.IFileService;
 import com.wuyong.util.FTPUtil;
+import com.wuyong.vo.BlogVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,6 +41,8 @@ public class BlogServiceImpl implements IBlogService {
     private IFileService iFileService;
     @Autowired
     private BlogRepository blogRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * 文件上传
@@ -51,10 +57,11 @@ public class BlogServiceImpl implements IBlogService {
 
     /**
      * 保存博客
-     * @param blog  博客
+     *
+     * @param blog 博客
      * @return
      */
-    public ServerResponse blogSave(Blog blog){
+    public ServerResponse blogSave(Blog blog) {
         //User currentUser = (User) session.getAttribute("currentUser");
         /*logger.info("currentUser====>"+currentUser);
         if (currentUser == null || currentUser.getUsername() == null) {
@@ -74,4 +81,34 @@ public class BlogServiceImpl implements IBlogService {
         return ServerResponse.createBySuccess("添加成功", blogSaved);
     }
 
+    /**
+     * 获取所有blog信息
+     *
+     * @return
+     */
+    public ServerResponse getAllBlogs() {
+        List<Blog> blogList = blogRepository.findAll();
+
+        List<BlogVo> blogVoList = new ArrayList<BlogVo>();
+        BlogVo blogVo = null;
+        for (Blog blog : blogList) {
+            User user = userRepository.findOne(blog.getAuthorId());
+            blogVo = new BlogVo();
+            blogVo.setAuthorName(user.getUsername());
+            blogVo.setAuthorId(blog.getAuthorId());
+            blogVo.setContent(blog.getContent());
+            blogVo.setId(blog.getId());
+            blogVo.setImgUrl(blog.getImgUrl());
+            blogVo.setIntro(blog.getIntro());
+            blogVo.setTitle(blog.getTitle());
+            blogVo.setCreated(blog.getCreated());
+            blogVoList.add(blogVo);
+        }
+
+        if (blogVoList.size() > 0) {
+            return ServerResponse.createBySuccess(blogVoList);
+        }
+
+        return ServerResponse.createByErrorMessage("获取失败");
+    }
 }

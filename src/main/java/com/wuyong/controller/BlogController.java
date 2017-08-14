@@ -108,5 +108,15 @@ public class BlogController {
         return iBlogService.blogSave(blog);
     }
 
+    /**
+     * 获取所有blog信息
+     * @return
+     */
+    @RequestMapping(value = "getAllBlogs")
+    public ServerResponse getAllBlogs() {
+        return iBlogService.getAllBlogs();
+    }
+
+//    TODO 分页获取blog信息
 
 }

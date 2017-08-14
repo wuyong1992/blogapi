@@ -15,4 +15,6 @@ public interface IBlogService {
     public String richTextImgUpload(MultipartFile file, String path);
 
     public ServerResponse blogSave(Blog blog);
+
+    public ServerResponse getAllBlogs();
 }
