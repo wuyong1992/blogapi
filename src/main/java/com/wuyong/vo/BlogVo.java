@@ -23,6 +23,7 @@ public class BlogVo {
     private String content; //内容
     private Integer authorId; //所属作者id
     private String authorName; //所属作者姓名
-    private Date created;
+    private Date createTime;
+    private Date updateTime;
 
 }

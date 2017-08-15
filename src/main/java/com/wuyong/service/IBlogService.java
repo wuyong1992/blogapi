@@ -17,4 +17,6 @@ public interface IBlogService {
     public ServerResponse blogSave(Blog blog);
 
     public ServerResponse getAllBlogs();
+
+    public ServerResponse getBlogById(Integer id);
 }

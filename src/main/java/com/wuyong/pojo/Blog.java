@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
@@ -39,8 +40,9 @@ public class Blog {
     private Integer authorId; //所属作者id
 
     @CreationTimestamp
-    private Date created;
-
+    private Date createTime;
+    @UpdateTimestamp
+    private Date updateTime;
     public Blog() {
     }
 
@@ -53,7 +55,8 @@ public class Blog {
                 ", intro='" + intro + '\'' +
                 ", content='" + content + '\'' +
                 ", authorId=" + authorId +
-                ", created=" + created +
+                ", creatTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

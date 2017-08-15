@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.stereotype.Component;
@@ -51,7 +52,9 @@ public class User {
     private Integer role;
 
     @CreationTimestamp
-    private Date created;
+    private Date createTime;
+    @UpdateTimestamp
+    private Date updateTime;
 
    /* @Column(columnDefinition = "0")
     public Integer getStatus() {
@@ -63,7 +66,6 @@ public class User {
         return role;
     }*/
 
-
     @Override
     public String toString() {
         return "User{" +
@@ -74,7 +76,8 @@ public class User {
                 ", email='" + email + '\'' +
                 ", status=" + status +
                 ", role=" + role +
-                ", created=" + created +
+                ", creatTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

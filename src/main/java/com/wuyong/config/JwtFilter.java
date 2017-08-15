@@ -37,8 +37,8 @@ public class JwtFilter extends GenericFilterBean {
         } else {
             //'Bearer '最后是空格，共7位
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new ServletException("Missing or invalid Authorization header -_-!");
-
+//                throw new ServletException("Missing or invalid Authorization header -_-!");
+                logger.info("Authorization header丢失或者失效 -_-!");
             }
 
             final String token = authHeader.substring(7);
@@ -47,7 +47,8 @@ public class JwtFilter extends GenericFilterBean {
                 final Claims claims = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody();
                 request.setAttribute("claims", claims);
             } catch (final SignatureException e) {
-                throw new ServletException("Invalid token -_-!");
+//                throw new ServletException("Invalid token -_-!");
+                logger.info("token失效 -_-!");
             }
 
             chain.doFilter(req,res);

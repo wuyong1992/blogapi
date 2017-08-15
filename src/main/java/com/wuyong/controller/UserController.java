@@ -91,6 +91,11 @@ public class UserController {
         return serverResponse;
     }
 
+    /**
+     * 获取当前用户
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/rest/getCurrentUser")
     public ServerResponse getCurrentUser(HttpServletRequest request) {
         String authorization = request.getHeader("authorization");
@@ -109,14 +114,15 @@ public class UserController {
 
     /**
      * 判断是否登录
-     *
      * @param session
      * @return
      */
-    @RequestMapping(value = "isLogin")
+    @RequestMapping(value = "/rest/isLogin")
     public ServerResponse isLogin(HttpSession session) {
-        logger.info("====是否登录请求已收到====");
-        return iUserService.isLogin(session);
+//        logger.info("====是否登录请求已收到====");
+//        return iUserService.isLogin(session);
+        //请求能到达，说明token没有问题
+        return ServerResponse.createBySuccess();
     }
 
     /**

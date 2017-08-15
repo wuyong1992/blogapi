@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -87,7 +88,7 @@ public class BlogServiceImpl implements IBlogService {
      * @return
      */
     public ServerResponse getAllBlogs() {
-        List<Blog> blogList = blogRepository.findAll();
+        List<Blog> blogList = blogRepository.findAll(new Sort(Sort.Direction.DESC,"id"));
 
         List<BlogVo> blogVoList = new ArrayList<BlogVo>();
         BlogVo blogVo = null;
@@ -96,19 +97,43 @@ public class BlogServiceImpl implements IBlogService {
             blogVo = new BlogVo();
             blogVo.setAuthorName(user.getUsername());
             blogVo.setAuthorId(blog.getAuthorId());
-            blogVo.setContent(blog.getContent());
+            blogVo.setContent(blog.getContent());   //列表展示可以不用传输具体内容
             blogVo.setId(blog.getId());
             blogVo.setImgUrl(blog.getImgUrl());
             blogVo.setIntro(blog.getIntro());
             blogVo.setTitle(blog.getTitle());
-            blogVo.setCreated(blog.getCreated());
+            blogVo.setCreateTime(blog.getCreateTime());
+            blogVo.setUpdateTime(blog.getUpdateTime());
             blogVoList.add(blogVo);
         }
 
         if (blogVoList.size() > 0) {
             return ServerResponse.createBySuccess(blogVoList);
         }
-
         return ServerResponse.createByErrorMessage("获取失败");
+    }
+
+    //获取单个blog
+    public ServerResponse getBlogById(Integer id) {
+        if (id < 1) {
+            return ServerResponse.createByErrorMessage("id不能是负数！");
+        }
+        Blog blog = blogRepository.findOne(id);
+        if (blog == null) {
+            return ServerResponse.createByErrorMessage("没有该id对应的blog");
+        }
+        BlogVo blogVo = new BlogVo();
+        User user = userRepository.findOne(blog.getAuthorId());
+        blogVo.setTitle(blog.getTitle());
+        blogVo.setAuthorName(user.getUsername());
+        blogVo.setAuthorId(blog.getAuthorId());
+        blogVo.setContent(blog.getContent());
+        blogVo.setId(blog.getId());
+        blogVo.setImgUrl(blog.getImgUrl());
+        blogVo.setIntro(blog.getIntro());
+        blogVo.setTitle(blog.getTitle());
+        blogVo.setCreateTime(blog.getCreateTime());
+        blogVo.setUpdateTime(blog.getUpdateTime());
+        return ServerResponse.createBySuccess(blogVo);
     }
 }

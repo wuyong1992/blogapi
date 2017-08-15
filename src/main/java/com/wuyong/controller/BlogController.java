@@ -119,4 +119,13 @@ public class BlogController {
 
 //    TODO 分页获取blog信息
 
+    /**
+     * 根据id获取blog
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getBlogById")
+    public ServerResponse getBlogById(Integer id) {
+        return iBlogService.getBlogById(id);
+    }
 }
