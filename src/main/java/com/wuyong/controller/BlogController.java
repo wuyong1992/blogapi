@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.wuyong.common.Const;
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.Blog;
+import com.wuyong.pojo.SearchParams;
 import com.wuyong.service.IBlogService;
 import com.wuyong.service.IFileService;
 import io.jsonwebtoken.Claims;
@@ -100,7 +101,11 @@ public class BlogController {
     @PostMapping(value = "/rest/blogSave")
     public ServerResponse blogSave(@RequestBody Blog blog, HttpServletRequest request) {
         logger.info("接受blog信息====>" + blog);
+        if (blog.getCategoryId() == null) {
+            blog.setCategoryId(4);      //TODO 硬编码，需要改
+        }
         blog.setImgUrl(this.imageURL);
+        this.imageURL = "";     //置空
         /*String authorization = request.getHeader("authorization");
         String token = authorization.substring(7);
         String username = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody().getSubject();
@@ -108,8 +113,24 @@ public class BlogController {
         return iBlogService.blogSave(blog);
     }
 
+
+    /**
+     * 更新blog
+     *
+     * @param blog
+     * @return
+     */
+    @PostMapping(value = "/rest/blogUpdate")
+    public ServerResponse blogUpdate(@RequestBody Blog blog) {
+        //logger.info("this.imageURL" + this.imageURL); null
+        blog.setImgUrl(this.imageURL);
+        return iBlogService.blogUpdate(blog);
+    }
+
+
     /**
      * 获取所有blog信息
+     *
      * @return
      */
     @RequestMapping(value = "getAllBlogs")
@@ -121,11 +142,21 @@ public class BlogController {
 
     /**
      * 根据id获取blog
+     *
      * @param id
      * @return
      */
     @RequestMapping(value = "getBlogById")
     public ServerResponse getBlogById(Integer id) {
         return iBlogService.getBlogById(id);
+    }
+
+    /**
+     * 根据所有条件返回对应blog
+     * @param searchParams  搜索条件
+     * @return
+     */
+    public ServerResponse searchBlogs(@RequestBody SearchParams searchParams) {
+        return iBlogService.searchBlogs(searchParams);
     }
 }

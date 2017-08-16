@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Created by 坚果
  * on 2017/7/15
+ * user
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {

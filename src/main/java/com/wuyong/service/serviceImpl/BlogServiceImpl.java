@@ -1,11 +1,14 @@
 package com.wuyong.service.serviceImpl;
 
-import com.google.common.collect.Lists;
 
+import com.google.common.collect.Lists;
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.Blog;
+import com.wuyong.pojo.Category;
+import com.wuyong.pojo.SearchParams;
 import com.wuyong.pojo.User;
 import com.wuyong.repository.BlogRepository;
+import com.wuyong.repository.CategoryRepository;
 import com.wuyong.repository.UserRepository;
 import com.wuyong.service.IBlogService;
 import com.wuyong.service.IFileService;
@@ -15,18 +18,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by 坚果
@@ -42,6 +43,8 @@ public class BlogServiceImpl implements IBlogService {
     private IFileService iFileService;
     @Autowired
     private BlogRepository blogRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -82,13 +85,29 @@ public class BlogServiceImpl implements IBlogService {
         return ServerResponse.createBySuccess("添加成功", blogSaved);
     }
 
+
+    //    blog更新
+    public ServerResponse blogUpdate(Blog blog) {
+        Blog blogFind = blogRepository.findOne(blog.getId());
+        if (StringUtils.equals(blog.getContent(), "")) {
+            blog.setContent(blogFind.getContent());
+        }
+        if (StringUtils.equals(blog.getImgUrl(), "") || blog.getImgUrl() == null) {
+            blog.setImgUrl(blogFind.getImgUrl());
+        }
+        Blog newBlow = blogRepository.save(blog);
+
+        return ServerResponse.createBySuccess(newBlow);
+    }
+
+
     /**
      * 获取所有blog信息
      *
      * @return
      */
     public ServerResponse getAllBlogs() {
-        List<Blog> blogList = blogRepository.findAll(new Sort(Sort.Direction.DESC,"id"));
+        List<Blog> blogList = blogRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
 
         List<BlogVo> blogVoList = new ArrayList<BlogVo>();
         BlogVo blogVo = null;
@@ -104,6 +123,10 @@ public class BlogServiceImpl implements IBlogService {
             blogVo.setTitle(blog.getTitle());
             blogVo.setCreateTime(blog.getCreateTime());
             blogVo.setUpdateTime(blog.getUpdateTime());
+            if (blog.getCategoryId() != null) {
+                Category category = categoryRepository.findOne(blog.getCategoryId());
+                blogVo.setCategoryName(category.getName());
+            }
             blogVoList.add(blogVo);
         }
 
@@ -135,5 +158,26 @@ public class BlogServiceImpl implements IBlogService {
         blogVo.setCreateTime(blog.getCreateTime());
         blogVo.setUpdateTime(blog.getUpdateTime());
         return ServerResponse.createBySuccess(blogVo);
+    }
+
+    //    根据搜索条件返回对应的blogs
+    public ServerResponse searchBlogs(SearchParams searchParams) {
+        String title = StringUtils.trim(searchParams.getSearchTitle());
+        Integer categoryId = searchParams.getSearchCategoryId();
+        List<Blog> searchBlogs = Lists.newArrayList();
+        if (StringUtils.isNotBlank(title) && categoryId != null) {
+            //没传入title搜索条件
+            searchBlogs = blogRepository.findBlogsByTitleContainingAndCategoryId(title,categoryId);
+        }
+        if (StringUtils.isNotBlank(title) && categoryId == null) {
+            searchBlogs = blogRepository.findBlogsByTitleContaining(title);
+        }
+        if (StringUtils.isBlank(title) && categoryId != null) {
+            searchBlogs = blogRepository.findBlogsByCategoryId(categoryId);
+        }
+        if (searchBlogs.size() > 0) {
+            return ServerResponse.createBySuccess(searchBlogs);
+        }
+        return ServerResponse.createByErrorMessage("没有找到对应的blog");
     }
 }

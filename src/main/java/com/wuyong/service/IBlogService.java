@@ -2,6 +2,7 @@ package com.wuyong.service;
 
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.Blog;
+import com.wuyong.pojo.SearchParams;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -19,4 +20,9 @@ public interface IBlogService {
     public ServerResponse getAllBlogs();
 
     public ServerResponse getBlogById(Integer id);
+
+    public ServerResponse blogUpdate(Blog blog);
+
+    public ServerResponse searchBlogs(SearchParams searchParams);
 }
+

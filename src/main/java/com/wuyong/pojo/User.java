@@ -9,10 +9,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -51,7 +48,9 @@ public class User {
     private Integer status;
     private Integer role;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @Column(updatable = false)      //不更新
     private Date createTime;
     @UpdateTimestamp
     private Date updateTime;

@@ -77,7 +77,7 @@ public class UserController {
      * 返回token
      *
      * @param mobile   用户登录使用手机号
-     * @param password 密码
+     * @param password 密码   TODO 返回给前端的时候，密码置空
      * @return
      */
     @PostMapping(value = "login")

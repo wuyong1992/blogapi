@@ -16,13 +16,15 @@ import java.util.Date;
 @Component
 public class BlogVo {
 
-    private Integer id;     //id
-    private String title;   //标题
-    private String imgUrl;  //图片链接
-    private String intro;   //简介
-    private String content; //内容
-    private Integer authorId; //所属作者id
-    private String authorName; //所属作者姓名
+    private Integer id;                     //id
+    private String title;                   //标题
+    private String imgUrl;                  //图片链接
+    private String intro;                   //简介
+    private String content;                 //内容
+    private Integer authorId;               //所属作者id
+    private String authorName;              //所属作者姓名
+    private Integer categoryId;             //所属分类id
+    private String categoryName;            //所属分类名称
     private Date createTime;
     private Date updateTime;
 

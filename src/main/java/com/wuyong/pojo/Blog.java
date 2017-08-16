@@ -28,18 +28,23 @@ public class Blog {
      * imgUrl   图片路径
      * intro    简介
      * content  内容
+     * authorId 所属作者id
+     * categoryId   所属分类id
      */
     @Id
     @GeneratedValue
-    private Integer id;     //id
+    private Integer id;
 
-    private String title;   //标题
-    private String imgUrl;  //图片链接
-    private String intro;   //简介
-    private String content; //内容
-    private Integer authorId; //所属作者id
+    private String title;
+    private String imgUrl;
+    private String intro;
+    private String content;
+    private Integer authorId;
+    private Integer categoryId;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @Column(updatable = false)
     private Date createTime;
     @UpdateTimestamp
     private Date updateTime;
