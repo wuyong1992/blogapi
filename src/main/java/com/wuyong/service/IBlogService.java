@@ -13,16 +13,20 @@ import javax.servlet.http.HttpSession;
  */
 public interface IBlogService {
 
-    public String richTextImgUpload(MultipartFile file, String path);
+    String richTextImgUpload(MultipartFile file, String path);
 
-    public ServerResponse blogSave(Blog blog);
+    ServerResponse blogSave(Blog blog);
 
-    public ServerResponse getAllBlogs();
+    ServerResponse getAllBlogs();
 
-    public ServerResponse getBlogById(Integer id);
+    ServerResponse getBlogById(Integer id);
 
-    public ServerResponse blogUpdate(Blog blog);
+    ServerResponse blogUpdate(Blog blog);
 
-    public ServerResponse searchBlogs(SearchParams searchParams);
+    ServerResponse searchBlogs(SearchParams searchParams);
+
+    ServerResponse deleteBlogById(Integer id);
+
+    ServerResponse hideBlogById(Integer id);
 }
 

@@ -17,13 +17,16 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog,Integer>{
 
+    //查找所有可用的blog
+    List<Blog> findAllByStatusOrderBySortOrderDesc(Integer status);
+
     //根据title 和 categoryID查找
-    List<Blog> findBlogsByTitleContainingAndCategoryId(String title, Integer categoryId);
+    List<Blog> findBlogsByTitleContainingAndCategoryIdAndStatus(String title, Integer categoryId, Integer status);
 
     //只有categoryId时查找
-    List<Blog> findBlogsByCategoryId(Integer categoryId);
+    List<Blog> findBlogsByCategoryIdAndStatus(Integer categoryId, Integer status);
 
     //只有title时使用
-    List<Blog> findBlogsByTitleContaining(String title);
+    List<Blog> findBlogsByTitleContainingAndStatus(String title, Integer status);
 
 }

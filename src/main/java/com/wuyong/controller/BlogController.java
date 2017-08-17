@@ -153,10 +153,32 @@ public class BlogController {
 
     /**
      * 根据所有条件返回对应blog
-     * @param searchParams  搜索条件
+     *
+     * @param searchParams 搜索条件
      * @return
      */
     public ServerResponse searchBlogs(@RequestBody SearchParams searchParams) {
         return iBlogService.searchBlogs(searchParams);
     }
+
+    /**
+     * 根据blog id 删除blog,改变状态为删除
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/rest/deleteBlog/{id}")
+    public ServerResponse deleteBlogByid(@PathVariable(value = "id") Integer id ) {
+        return iBlogService.deleteBlogById(id);
+    }
+
+    /**
+     * 根据blog id 禁用log,改变状态为禁用
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/rest/hideBlog/{id}")
+    public ServerResponse hideBlogByid(@PathVariable(value = "id") Integer id ) {
+        return iBlogService.hideBlogById(id);
+    }
+
 }

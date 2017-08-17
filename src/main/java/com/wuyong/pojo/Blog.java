@@ -24,6 +24,8 @@ public class Blog {
 
     /**
      * id       主键，自增长
+     * status   状态 0正常  1隐藏  2删除
+     * sortOrder 排序
      * title    标题
      * imgUrl   图片路径
      * intro    简介
@@ -35,6 +37,8 @@ public class Blog {
     @GeneratedValue
     private Integer id;
 
+    private Integer status;
+    private Integer sortOrder;
     private String title;
     private String imgUrl;
     private String intro;
@@ -55,12 +59,14 @@ public class Blog {
     public String toString() {
         return "Blog{" +
                 "id=" + id +
+                ", status=" + status +
                 ", title='" + title + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", intro='" + intro + '\'' +
                 ", content='" + content + '\'' +
                 ", authorId=" + authorId +
-                ", creatTime=" + createTime +
+                ", categoryId=" + categoryId +
+                ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
     }

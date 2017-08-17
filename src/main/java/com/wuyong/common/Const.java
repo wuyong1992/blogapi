@@ -29,6 +29,11 @@ public class Const {
         int ROLE_ADMIN = 1;  //管理员
     }
 
+    public interface BlogStatus {
+        int STATUS_USABLE = 0;
+        int STATUS_HIDE = 1;
+        int STATUS_DELETE = 2;
+    }
     //通过枚举类定义常量
     public enum ProductStatusEnum {
         ON_SALE(1, "在售");

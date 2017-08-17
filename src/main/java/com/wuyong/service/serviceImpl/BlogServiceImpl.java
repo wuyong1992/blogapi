@@ -2,6 +2,7 @@ package com.wuyong.service.serviceImpl;
 
 
 import com.google.common.collect.Lists;
+import com.wuyong.common.Const;
 import com.wuyong.common.ServerResponse;
 import com.wuyong.pojo.Blog;
 import com.wuyong.pojo.Category;
@@ -107,10 +108,10 @@ public class BlogServiceImpl implements IBlogService {
      * @return
      */
     public ServerResponse getAllBlogs() {
-        List<Blog> blogList = blogRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+        List<Blog> blogList = blogRepository.findAllByStatusOrderBySortOrderDesc(Const.BlogStatus.STATUS_USABLE);
 
         List<BlogVo> blogVoList = new ArrayList<BlogVo>();
-        BlogVo blogVo = null;
+        BlogVo blogVo;
         for (Blog blog : blogList) {
             User user = userRepository.findOne(blog.getAuthorId());
             blogVo = new BlogVo();
@@ -167,17 +168,39 @@ public class BlogServiceImpl implements IBlogService {
         List<Blog> searchBlogs = Lists.newArrayList();
         if (StringUtils.isNotBlank(title) && categoryId != null) {
             //没传入title搜索条件
-            searchBlogs = blogRepository.findBlogsByTitleContainingAndCategoryId(title,categoryId);
+            searchBlogs =
+                    blogRepository.findBlogsByTitleContainingAndCategoryIdAndStatus(title, categoryId, Const.BlogStatus.STATUS_USABLE);
         }
         if (StringUtils.isNotBlank(title) && categoryId == null) {
-            searchBlogs = blogRepository.findBlogsByTitleContaining(title);
+            searchBlogs = blogRepository.findBlogsByTitleContainingAndStatus(title, Const.BlogStatus.STATUS_USABLE);
         }
         if (StringUtils.isBlank(title) && categoryId != null) {
-            searchBlogs = blogRepository.findBlogsByCategoryId(categoryId);
+            searchBlogs = blogRepository.findBlogsByCategoryIdAndStatus(categoryId, Const.BlogStatus.STATUS_USABLE);
         }
         if (searchBlogs.size() > 0) {
             return ServerResponse.createBySuccess(searchBlogs);
         }
         return ServerResponse.createByErrorMessage("没有找到对应的blog");
+    }
+
+    //删除blog
+    public ServerResponse deleteBlogById(Integer id) {
+        Blog blog = blogRepository.findOne(id);
+        if (blog == null) {
+            return ServerResponse.createByErrorMessage("没有找到该blog");
+        }
+        blog.setStatus(Const.BlogStatus.STATUS_DELETE);
+        return ServerResponse.createBySuccess();
+    }
+
+    //禁用blog
+    @Override
+    public ServerResponse hideBlogById(Integer id) {
+        Blog blog = blogRepository.findOne(id);
+        if (blog == null) {
+            return ServerResponse.createByErrorMessage("没有找到该blog");
+        }
+        blog.setStatus(Const.BlogStatus.STATUS_HIDE);
+        return ServerResponse.createBySuccess();
     }
 }
